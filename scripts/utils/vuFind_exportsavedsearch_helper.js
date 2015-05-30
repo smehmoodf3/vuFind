@@ -30,7 +30,7 @@ var VuFindExportSavedSearchHelper = {
             savedSearchListFld=form.addField('custpage_savedsearch', 'select', 'Saved Search');
 
             form.addButton('custpage_upload','Upload by Saved Search','VuFindExportSavedSearchClient.uploadSavedSearch()');
-            form.addButton('custpage_uploadbyfile','Upload By File');
+            form.addButton('custpage_uploadbyfile','Upload By File','VuFindExportSavedSearchClient.uploadFile()');
             form.setScript('customscript_vufind_exportss_client');
 
             savedSearchOptions=this.getSavedSearchList();

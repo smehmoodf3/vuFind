@@ -59,6 +59,13 @@ var VuFindExportSavedSearchClient = (function () {
 
 
         }
+        ,
+        uploadFile: function () {
+
+            var url = nlapiResolveURL('SUITELET', 'customscript_vufind_fileupload_suit', 'customdeploy_vufind_fileupload_suit');
+
+            nlOpenWindow(url, 'wizard_popup','width=400,height=320,resizable=yes,scrollbars=no');
+        }
 
     };
 })();
