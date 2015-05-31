@@ -42,20 +42,35 @@ var SavedSearchResultConverter = (function () {
                 // Returns an array of column internal Ids
                 var columns = resultSet.getAllColumns();
 
-                console.log(JSON.stringify(columns));
+                //console.log(JSON.stringify(columns));
 
+                temp = [];
                 // Looping through each column and assign it to the temp array
                 for (var y = 0; y < columns.length; y++) {
+
+                    //console.log(columns[y].name+ '     ' + resultSet.getValue(columns[y]));
                     temp[y] = (!!resultSet.getValue(columns[y]) ? resultSet.getValue(columns[y]) : resultSet.getText(columns[y]));
+                    if(!temp[y])
+                        temp[y]="";
                 }
                 // Taking the content of the temp array and assigning it to the Content Array.
+                //console.log('temp : '+temp);
                 content[x] = temp;
                 x++;
+
+                //break;
             }
 
+
+            //console.log(content);
             // Looping through the content array and assigning it to the contents string variable.
             for (var z = 0; z < content.length; z++) {
-                contents += content[z].toString() + '\n';
+                //console.log('shoaib         ' +    content[z]);
+
+                //contents += content[z].toString() + '\n';
+
+                contents += content[z].map(function(id) {    return '"' + id + '"';   }).join(',').toString() + '\n';
+
             }
 
             return contents;
