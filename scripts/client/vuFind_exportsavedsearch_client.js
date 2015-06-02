@@ -55,9 +55,7 @@ var VuFindExportSavedSearchClient = (function () {
         successFunction: function(d) {
 
             jQuery('#overlay').hide();
-            alert('successfull ended call');
-
-
+            alert(d.msg);
         }
         ,
         uploadFile: function () {

@@ -14,6 +14,7 @@ var SavedSearchResultConverter = (function () {
             var contents = '';
             var searchResult = nlapiSearchRecord(null, searchId, null, null);
 
+
             if (!searchResult || searchResult.length <= 0) {
                 throw new Error('No result returned after executing search.');
             }

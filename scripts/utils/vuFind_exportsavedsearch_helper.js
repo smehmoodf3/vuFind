@@ -58,26 +58,36 @@ var VuFindExportSavedSearchHelper = {
 
     processPostCall:function(request)
     {
-
-
         try {
 
             nlapiLogExecution('debug','call to processPostCall');
-            //var savedSearchId = JSON.parse(request.getBody()).savedsearchId;
+
+            var savedSearchId = JSON.parse(request.getBody()).savedsearchId;
+
+
+            nlapiLogExecution('debug','savedSearchId',savedSearchId);
+
             var csvData
             var responseContent={};
 
-            //if (!!savedSearchId) {
-            //    csvData = SavedSearchResultConverter.convertToCSV(savedSearchId, true);
-            //}
+            if (!!savedSearchId) {
+
+                nlapiLogExecution('debug','saved search id found');
+
+                csvData = SavedSearchResultConverter.convertToCSV(savedSearchId, true);
+
+                nlapiLogExecution('debug','csvData',csvData);
+
+                VuFindDataExportHelper.exportCSV(csvData,VuFindDataExportHelper.EXPORT_DATA_SOURCE.SAVEDSEARCH);
+            }
 
             responseContent.status = 'success';
-            responseContent.msg = 'CSV GenerateSuccessfully';
+            responseContent.msg = 'Data Exported Successfully';
             responseContent.data='';
 
         }catch(ex){
             responseContent.status = 'failed';
-            responseContent.msg = 'CSV Not Generate Please Try Againn';
+            responseContent.msg = 'There is some problem, please try again';
             responseContent.error = 'Error ' + ex.toString();
 
         }

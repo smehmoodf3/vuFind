@@ -169,6 +169,7 @@ var VuFindFileUploader = (function () {
                     }
                 }
 
+
                 var file = request.getFile(fileUploadFldId);
 
 
@@ -181,6 +182,18 @@ var VuFindFileUploader = (function () {
                             file.setFolder(parseInt(folderId));
                             file.setName(guid + fileExtention);
                             var id = nlapiSubmitFile(file);
+
+                            var csvData = nlapiLoadFile(id).getValue();
+
+                            if(!!csvData) {
+
+                                nlapiLogExecution('debug','csv data',csvData);
+
+                                VuFindDataExportHelper.exportCSV(csvData,VuFindDataExportHelper.EXPORT_DATA_SOURCE.FILE);
+                            }
+
+
+
                             response.write("<script type='text/javascript'>window.close();</script>");
                         } else {
                             response.write("Sorry, something went wrong. Please try again.");
