@@ -1,3 +1,0 @@
-<!-- Netsuite Inc. AAE BSN - Web Site Theme - Top of AAE Tags in Addition to <head> -->
-<link rel="stylesheet" type="text/css" href="/c.<NLCOMPANYID>/<GPR_AAE_BUNDLENAME>/site/bsn/bsn-styles.css">
-<script type="text/javascript" src="/c.<NLCOMPANYID>/<GPR_AAE_BUNDLENAME>/site/bsn/bsn-library.js"></script>

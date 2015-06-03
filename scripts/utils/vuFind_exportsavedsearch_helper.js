@@ -78,7 +78,7 @@ var VuFindExportSavedSearchHelper = {
 
                 nlapiLogExecution('debug','csvData',csvData);
 
-                VuFindDataExportHelper.exportCSV(csvData,VuFindDataExportHelper.EXPORT_DATA_SOURCE.SAVEDSEARCH);
+                VuFindDataCommunicationHelper.exportCSV(csvData,VuFindDataCommunicationHelper.EXPORT_DATA_SOURCE.SAVEDSEARCH);
             }
 
             responseContent.status = 'success';
