@@ -209,6 +209,10 @@
 				overflow: 'hidden',
 				position: 'relative'
 			});
+
+
+            console.log(slider.viewport);
+
 			slider.viewport.parent().css({
 				maxWidth: getViewportMaxWidth()
 			});
@@ -302,7 +306,11 @@
 			// if "vertical" mode, always use adaptiveHeight to prevent odd behavior
 			if (slider.settings.mode == 'vertical') slider.settings.adaptiveHeight = true;
 			// set the viewport height
-			slider.viewport.height(getViewportHeight());
+
+
+            slider.viewport.height(getViewportHeight());
+
+
 			// make sure everything is positioned just right (same as a window resize)
 			el.redrawSlider();
 			// onSliderLoad callback
@@ -323,6 +331,7 @@
 			if (slider.settings.touchEnabled && !slider.settings.ticker) initTouch();
 		}
 
+
 		/**
 		 * Returns the calculated height of the viewport, used to determine either adaptiveHeight or the maxHeight value
 		 */
@@ -332,13 +341,18 @@
 			var children = $();
 			// if mode is not "vertical" and adaptiveHeight is false, include all children
 			if(slider.settings.mode != 'vertical' && !slider.settings.adaptiveHeight){
+
 				children = slider.children;
 			}else{
+
+
 				// if not carousel, return the single active child
 				if(!slider.carousel){
+
 					children = slider.children.eq(slider.active.index);
 				// if carousel, return a slice of children
 				}else{
+
 					// get the individual slide index
 					var currentIndex = slider.settings.moveSlides == 1 ? slider.active.index : slider.active.index * getMoveBy();
 					// add the current slide to the children
@@ -354,6 +368,10 @@
 					}
 				}
 			}
+
+            console.log('block1');
+
+
 			// if "vertical" mode, calculate the sum of the heights of the children
 			if(slider.settings.mode == 'vertical'){
 				children.each(function(index) {
@@ -363,12 +381,38 @@
 				if(slider.settings.slideMargin > 0){
 					height += slider.settings.slideMargin * (slider.settings.minSlides - 1);
 				}
+
+
 			// if not "vertical" mode, calculate the max height of the children
 			}else{
+
+
+                var childs= children.map(function(){
+
+
+                    console.log($(this));
+
+
+                    return $(this).outerHeight(false);
+
+
+                }).get();
+
+
+                console.log(childs);
+
 				height = Math.max.apply(Math, children.map(function(){
-					return $(this).outerHeight(false);
+
+
+                    return $(this).outerHeight(false);
+
+
 				}).get());
+
+
 			}
+
+            console.log('block2  ' + height);
 
 			if(slider.viewport.css('box-sizing') == 'border-box'){
 				height +=	parseFloat(slider.viewport.css('padding-top')) + parseFloat(slider.viewport.css('padding-bottom')) +
@@ -378,6 +422,7 @@
 			}
 
 			return height;
+
 		}
 
 		/**

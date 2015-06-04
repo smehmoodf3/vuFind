@@ -1,0 +1,128 @@
+<script type="text/javascript" src="/site/jquery-1.8.3.min.js"></script>
+
+
+<script  type="text/javascript">
+
+<%= getAttribute("item","15","storeurl") %>
+
+(function($){
+
+//$(document).ready(function(){
+
+
+
+var suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommendations_suit&deploy=customdeploy_vufind_recommendations_suit";
+
+$.ajax({ url: suiteletUrl,
+         dataType: "jsonp",
+         jsonpCallback: 'vuFindRecommendations'
+       });
+
+//});
+
+
+
+})(jQuery);
+
+
+
+function vuFindRecommendations(data)
+{
+
+(function($){
+
+
+ var recommendations;
+ var htmlData='';
+ var itemURL;
+ var itemImg;
+ var itemDesc;
+ var itemInternalId;
+ var temp;
+
+
+
+    if(!!data)
+    {
+        recommendations=data.recommendations;
+
+      if(!!recommendations &&recommendations.length>0)
+      {
+
+             if(recommendations.length){
+
+
+                    for(var r=0;r<recommendations.length;r++)
+                    {
+
+                            itemInternalId=recommendations[r].internalid;
+
+                            //temp="<%=getCurrentAttribute('item','storeurl')%>";
+
+                            //var declareAttr='<%= declareAttribute("item",'+ itemInternalId + ',"storeurl") %>';
+
+
+                             itemURL=<%= getAttribute("item",'+ itemInternalId + ',"storeurl") %>;
+
+                                alert(itemURL);
+
+                                  break;
+
+
+                           /*
+                            itemImg="<%= getAttribute('item','"+itemInternalId+"','storedisplayimage') %>";
+
+
+
+
+
+                           itemDesc="<%= getAttribute('item','"+itemInternalId+"','storedetaileddescription') %>";
+
+
+                           itemDetailDesc="<%= getAttribute('item','"+itemInternalId+"','storedescription') %>";
+
+                            htmlData=htmlData+'<a href="'+itemURL+'"><img src="'+itemImg+'"></a>';
+
+
+                            htmlData=htmlData+'<br/>  '+itemDesc;
+                            htmlData=htmlData+'<br/>  '+itemDetailDesc;
+
+
+
+
+                        $('<li style="height:300px;" />', {html: htmlData}).appendTo('ul.recommendationsList');
+
+
+                        */
+                    }
+              }
+      }
+
+    }
+
+
+  $('.recommendationsList').bxSlider({
+  minSlides: 3,
+  maxSlides: 4,
+  slideWidth: 200
+// ,slideMargin: 10
+// ,auto:true
+ //,controls:true	//Left Right Button
+ //,pager:true	// Slide Selector .. dots to select slided
+ //,autoStart:false
+});
+
+
+})(jQuery);
+
+
+
+
+alert(JSON.stringify(data));
+
+
+}
+
+
+
+</script>

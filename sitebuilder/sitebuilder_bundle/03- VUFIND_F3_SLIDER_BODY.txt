@@ -1,0 +1,3 @@
+<div  id="vufind_f3_bxslider" >
+<ul class="recommendationsList" />
+</div>

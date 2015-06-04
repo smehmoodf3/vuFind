@@ -8,6 +8,11 @@
 <!-- bxSlider CSS file -->
 <link href="js/jquery.bxslider.css" rel="stylesheet" />
 
+<style type="text/css">
+
+
+
+</style>
 
 
 
@@ -16,15 +21,21 @@
 
 
 <ul class="bxslider">
-  <li><img src="images/pic1.jpg" /></li>
-  <li><img src="images/pic2.jpg" /></li>
-  <li><img src="images/pic3.jpg" /></li>
-  <li><img src="images/pic4.jpg" /></li>
-  <li><img src="images/pic1.jpg" /></li>
-  <li><img src="images/pic2.jpg" /></li>
-  <li><img src="images/pic3.jpg" /></li>
-  <li><img src="images/pic4.jpg" /></li>
+
+    <li id="list1" style="height:250;"><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+    <li id="list1" style="height:250;" ><a href="#" style="display: inline-block"><img  id="myimg" src="images/pic1.jpg" /><div><br/>This is text<br/></div></a></li>
+
+
+
 </ul>
+
+
 
 
 <script>
@@ -32,14 +43,34 @@
 $(document).ready(function(){
   //$('.bxslider').bxSlider();
   $('.bxslider').bxSlider({
-  minSlides: 3,
-  maxSlides: 4,
-  slideWidth: 200
- ,slideMargin: 10
+
+//  minSlides: 3,
+//  maxSlides: 4,
+//  slideWidth: 200
+ //,slideMargin: 10
+ //,adaptiveHeight:true
 // ,auto:true
  //,controls:true	//Left Right Button
  //,pager:true	// Slide Selector .. dots to select slided
  //,autoStart:false
+
+
+
+
+
+
+          auto: false,
+          controls: true,
+          minSlides: 3,
+          maxSlides: 4,
+          slideMargin: 0,
+          slideWidth: 300
+
+
+
+
+
+
  
 });
 
