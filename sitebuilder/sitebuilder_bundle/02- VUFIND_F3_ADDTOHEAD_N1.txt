@@ -51,18 +51,20 @@ function vuFindRecommendations(data)
                              itemDesc=recommendations[r].storedisplayname;
                              itemDetailDesc=recommendations[r].storedescription;
 
+
                              htmlData=htmlData+'<a href="'+itemURL+'"><img src="'+itemImg+'"></a>';
                              htmlData=htmlData+'<br/>  '+itemDesc;
                              htmlData=htmlData+'<br/>  '+itemDetailDesc;
 
-                                alert(htmlData);
-                        $('<li style="height:300px;" />', {html: htmlData}).appendTo('ul.recommendationsList');
+
+                        $('<li/>', {html: htmlData}).appendTo('ul.recommendationsList');
 
                     }
               }
       }
 
     }
+
 
 
   $('.recommendationsList').bxSlider({
@@ -77,9 +79,12 @@ function vuFindRecommendations(data)
 });
 
 
+
 })(jQuery);
 
 //alert(JSON.stringify(data));
+
+
 
 }
 

@@ -75,9 +75,9 @@ var VuFindGetRecommendationHelper = {
     getDomain: function(storeDomain) {
 
         if (!!storeDomain && storeDomain.indexOf('na1')>-1) {
-            return 'system.na1.netsuite.com';
+            return 'https://system.na1.netsuite.com';
         } else {
-            return 'system.netsuite.com';
+            return 'https://system.netsuite.com';
         }
 
         return resultArray;
