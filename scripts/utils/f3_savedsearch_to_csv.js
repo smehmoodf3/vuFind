@@ -1,6 +1,8 @@
 /**
  * Saved Search results to CSV
  * @type {{convertToCSV}}
+ *
+ * Logic is edited for vufind , this is not generalized logic
  */
 var SavedSearchResultConverter = (function () {
     return {
@@ -13,6 +15,7 @@ var SavedSearchResultConverter = (function () {
         convertToCSV: function (searchId, includeHeader) {
             var contents = '';
             var searchResult = nlapiSearchRecord(null, searchId, null, null);
+
 
 
             if (!searchResult || searchResult.length <= 0) {
@@ -30,7 +33,8 @@ var SavedSearchResultConverter = (function () {
                 var basicColumns = firstResult.getAllColumns();
 
                 for (var c = 0; c < basicColumns.length; c++) {
-                    temp.push( basicColumns[c].getName() );
+
+                    temp.push(!!basicColumns[c].getLabel()? basicColumns[c].getLabel():basicColumns[c].getName());
                 }
 
                 content[x] = temp;
@@ -50,6 +54,8 @@ var SavedSearchResultConverter = (function () {
                 for (var y = 0; y < columns.length; y++) {
 
                     //console.log(columns[y].name+ '     ' + resultSet.getValue(columns[y]));
+
+
                     temp[y] = (!!resultSet.getValue(columns[y]) ? resultSet.getValue(columns[y]) : resultSet.getText(columns[y]));
                     if(!temp[y])
                         temp[y]="";

@@ -22,12 +22,22 @@ var VuFindExportSavedSearchHelper = {
         var savedSearchListFld;
         var savedSearchOptions;
         var savedSearchId;
+        var categoryField;
 
         if(request.getMethod() === 'GET')
         {
             form=nlapiCreateForm('Upload Data to vuFind');
 
+            categoryField=form.addField('custpage_category', 'text', 'Category').setMaxLength(20);
+
+            categoryField.setLayoutType('normal', 'startcol');
+
+            categoryField.setDisplaySize(20, 20);
+
+
+
             savedSearchListFld=form.addField('custpage_savedsearch', 'select', 'Saved Search');
+
 
             form.addButton('custpage_upload','Upload by Saved Search','VuFindExportSavedSearchClient.uploadSavedSearch()');
             form.addButton('custpage_uploadbyfile','Upload By File','VuFindExportSavedSearchClient.uploadFile()');
@@ -63,11 +73,12 @@ var VuFindExportSavedSearchHelper = {
             nlapiLogExecution('debug','call to processPostCall');
 
             var savedSearchId = JSON.parse(request.getBody()).savedsearchId;
+            var category=JSON.parse(request.getBody()).category;
 
 
             nlapiLogExecution('debug','savedSearchId',savedSearchId);
 
-            var csvData
+            var csvDataObject={};
             var responseContent={};
 
             if (!!savedSearchId) {
@@ -78,7 +89,10 @@ var VuFindExportSavedSearchHelper = {
 
                 nlapiLogExecution('debug','csvData',csvData);
 
-                VuFindDataCommunicationHelper.exportCSV(csvData,VuFindDataCommunicationHelper.EXPORT_DATA_SOURCE.SAVEDSEARCH);
+                csvDataObject.category=category;
+                csvDataObject.csvData=csvData;
+
+                VuFindDataCommunicationHelper.exportCSV(csvDataObject,VuFindDataCommunicationHelper.EXPORT_DATA_SOURCE.SAVEDSEARCH);
             }
 
             responseContent.status = 'success';

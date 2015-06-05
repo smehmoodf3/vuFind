@@ -7,21 +7,15 @@
 
 (function($){
 
-//$(document).ready(function(){
+$(document).ready(function(){
 
-
-
-var suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommendations_suit&deploy=customdeploy_vufind_recommendations_suit";
+var suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommendations_suit&deploy=customdeploy_vufind_recommendations_suit"+"&storeid=1&storedomain=shopping.na1.netsuite.com";
 
 $.ajax({ url: suiteletUrl,
          dataType: "jsonp",
          jsonpCallback: 'vuFindRecommendations'
        });
-
-//});
-
-
-
+});
 })(jQuery);
 
 
@@ -39,9 +33,6 @@ function vuFindRecommendations(data)
  var itemDesc;
  var itemInternalId;
  var temp;
-
-
-
     if(!!data)
     {
         recommendations=data.recommendations;
@@ -54,46 +45,19 @@ function vuFindRecommendations(data)
 
                     for(var r=0;r<recommendations.length;r++)
                     {
+                             htmlData='';
+                             itemURL=recommendations[r].itemurl;
+                             itemImg=recommendations[r].imageurl;
+                             itemDesc=recommendations[r].storedisplayname;
+                             itemDetailDesc=recommendations[r].storedescription;
 
-                            itemInternalId=recommendations[r].internalid;
+                             htmlData=htmlData+'<a href="'+itemURL+'"><img src="'+itemImg+'"></a>';
+                             htmlData=htmlData+'<br/>  '+itemDesc;
+                             htmlData=htmlData+'<br/>  '+itemDetailDesc;
 
-                            //temp="<%=getCurrentAttribute('item','storeurl')%>";
-
-                            //var declareAttr='<%= declareAttribute("item",'+ itemInternalId + ',"storeurl") %>';
-
-
-                             itemURL=<%= getAttribute("item",'+ itemInternalId + ',"storeurl") %>;
-
-                                alert(itemURL);
-
-                                  break;
-
-
-                           /*
-                            itemImg="<%= getAttribute('item','"+itemInternalId+"','storedisplayimage') %>";
-
-
-
-
-
-                           itemDesc="<%= getAttribute('item','"+itemInternalId+"','storedetaileddescription') %>";
-
-
-                           itemDetailDesc="<%= getAttribute('item','"+itemInternalId+"','storedescription') %>";
-
-                            htmlData=htmlData+'<a href="'+itemURL+'"><img src="'+itemImg+'"></a>';
-
-
-                            htmlData=htmlData+'<br/>  '+itemDesc;
-                            htmlData=htmlData+'<br/>  '+itemDetailDesc;
-
-
-
-
+                                alert(htmlData);
                         $('<li style="height:300px;" />', {html: htmlData}).appendTo('ul.recommendationsList');
 
-
-                        */
                     }
               }
       }
@@ -115,14 +79,8 @@ function vuFindRecommendations(data)
 
 })(jQuery);
 
-
-
-
-alert(JSON.stringify(data));
-
+//alert(JSON.stringify(data));
 
 }
-
-
 
 </script>

@@ -87,7 +87,14 @@ var VuFindFileUploader = (function () {
             guidFld.setDefaultValue(guid);
             guidFld.setDisplayType("hidden");
 
-            fileUploadForm.setScript("");
+            //category
+            var categoryFld = fileUploadForm.addField("custpage_category", "text");
+            categoryFld.setDefaultValue(request.getParameter('custpage_category'));
+            categoryFld.setDisplayType("hidden");
+
+
+
+        fileUploadForm.setScript("");
             fileUploadForm.addSubmitButton("Upload");
             fileUploadForm.addResetButton();
             return fileUploadForm;
@@ -179,17 +186,25 @@ var VuFindFileUploader = (function () {
                     if (file.getSize() / 1048576 <= 10) {
                         if (folderId !== null) {
                             var guid = request.getParameter("custpage_guid");
+                            var category=request.getParameter("custpage_category");
+
                             file.setFolder(parseInt(folderId));
                             file.setName(guid + fileExtention);
                             var id = nlapiSubmitFile(file);
 
                             var csvData = nlapiLoadFile(id).getValue();
 
+
                             if(!!csvData) {
+
+                                var csvDataObj={};
+
+                                csvDataObj.category=category;
+                                csvDataObj.csvData=csvData;
 
                                 nlapiLogExecution('debug','csv data',csvData);
 
-                                VuFindDataCommunicationHelper.exportCSV(csvData,VuFindDataCommunicationHelper.EXPORT_DATA_SOURCE.FILE);
+                                VuFindDataCommunicationHelper.exportCSV(csvDataObj,VuFindDataCommunicationHelper.EXPORT_DATA_SOURCE.FILE);
                             }
 
 
