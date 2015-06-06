@@ -12,7 +12,7 @@ var SavedSearchResultConverter = (function () {
          * @param includeHeader true / false to tell if headers should be included or not
          * @returns {*}
          */
-        convertToCSV: function (searchId, includeHeader) {
+        convertToCSV: function (searchId, includeHeader,domain) {
             var contents = '';
             var searchResult = nlapiSearchRecord(null, searchId, null, null);
 
@@ -46,6 +46,7 @@ var SavedSearchResultConverter = (function () {
                 var resultSet = searchResult[i];
                 // Returns an array of column internal Ids
                 var columns = resultSet.getAllColumns();
+                var colTitle;
 
                 //console.log(JSON.stringify(columns));
 
@@ -57,8 +58,20 @@ var SavedSearchResultConverter = (function () {
 
 
                     temp[y] = (!!resultSet.getValue(columns[y]) ? resultSet.getValue(columns[y]) : resultSet.getText(columns[y]));
+
+                    colTitle=!!columns[y].getLabel()? columns[y].getLabel():columns[y].getName();
+
+                    nlapiLogExecution('debug','colTitle',colTitle);
+
                     if(!temp[y])
                         temp[y]="";
+
+
+                    if(!!temp[y] && !!colTitle && colTitle.toUpperCase() ==='IMAGE-URL')
+                    {
+                        temp[y]=domain + temp[y];
+                    }
+
                 }
                 // Taking the content of the temp array and assigning it to the Content Array.
                 //console.log('temp : '+temp);

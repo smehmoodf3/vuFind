@@ -74,9 +74,10 @@ var VuFindExportSavedSearchHelper = {
 
             var savedSearchId = JSON.parse(request.getBody()).savedsearchId;
             var category=JSON.parse(request.getBody()).category;
+            var domain=JSON.parse(request.getBody()).domain;
 
 
-            nlapiLogExecution('debug','savedSearchId',savedSearchId);
+            nlapiLogExecution('debug','savedSearchId',savedSearchId+'   ' + domain);
 
             var csvDataObject={};
             var responseContent={};
@@ -85,7 +86,7 @@ var VuFindExportSavedSearchHelper = {
 
                 nlapiLogExecution('debug','saved search id found');
 
-                csvData = SavedSearchResultConverter.convertToCSV(savedSearchId, true);
+                csvData = SavedSearchResultConverter.convertToCSV(savedSearchId, true,domain);
 
                 nlapiLogExecution('debug','csvData',csvData);
 

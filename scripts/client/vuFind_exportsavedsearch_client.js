@@ -30,6 +30,7 @@ var VuFindExportSavedSearchClient = (function () {
             var postData = {};
             postData.savedsearchId = nlapiGetFieldValue('custpage_savedsearch');
             postData.category= nlapiGetFieldValue('custpage_category');
+            postData.domain=document.location.origin;
 
             jQuery.ajax({
                 type: "POST",
