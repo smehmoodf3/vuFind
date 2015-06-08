@@ -9,13 +9,30 @@
 
 $(document).ready(function(){
 
-var suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommendations_suit&deploy=customdeploy_vufind_recommendations_suit"+"&storeid=1&storedomain=shopping.na1.netsuite.com";
+
+var storeIdElements=$("[name='n']");
+var storeId=1;
+var suiteletUrl;
+var storeDomain=document.location.origin;
+var itemInternalId="<%=getCurrentAttribute('item','internalid')%>";
+
+if(!!storeIdElements && storeIdElements.length>0)
+{
+
+    storeId=storeIdElements[0].value;
+
+}
+
+suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommendations_suit&deploy=customdeploy_vufind_recommendations_suit"+"&storeid="+storeId+"&storedomain="+storeDomain+"&storeitemid="+itemInternalId;
 
 $.ajax({ url: suiteletUrl,
          dataType: "jsonp",
          jsonpCallback: 'vuFindRecommendations'
        });
 });
+
+
+
 })(jQuery);
 
 
@@ -70,7 +87,7 @@ function vuFindRecommendations(data)
   $('.recommendationsList').bxSlider({
   minSlides: 3,
   maxSlides: 4,
-  slideWidth: 200
+  slideWidth: 220
 // ,slideMargin: 10
 // ,auto:true
  //,controls:true	//Left Right Button

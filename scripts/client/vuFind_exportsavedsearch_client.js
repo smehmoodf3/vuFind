@@ -18,7 +18,6 @@ var VuFindExportSavedSearchClient = (function () {
     return {
 
         uploadSavedSearch: function () {
-
             if(!this.validateSavedSearchCall())
             return;
 
@@ -29,6 +28,7 @@ var VuFindExportSavedSearchClient = (function () {
             var result;
             var postData = {};
             postData.savedsearchId = nlapiGetFieldValue('custpage_savedsearch');
+            postData.savedsearchName = nlapiGetFieldText('custpage_savedsearch');
             postData.category= nlapiGetFieldValue('custpage_category');
             postData.domain=document.location.origin;
 
@@ -40,12 +40,7 @@ var VuFindExportSavedSearchClient = (function () {
                 dataType: "json",
                 timeout: 45000
             }).done(function(d) {
-
-
                 VuFindExportSavedSearchClient.successFunction(d);
-
-
-
             }).fail(function(jqXHR, textStatus) {
                 jQuery('#overlay').fadeOut();
                 if (textStatus === 'timeout') {
@@ -58,22 +53,22 @@ var VuFindExportSavedSearchClient = (function () {
 
         },
 
+        //Call upon success of ajaz call
         successFunction: function(d) {
 
             jQuery('#overlay').hide();
             alert(d.msg);
         }
         ,
+        //Call to Uplaod File Suitelet
         uploadFile: function () {
-
             if(!this.validateFileUploadCall())
             return;
-
             var url = nlapiResolveURL('SUITELET', 'customscript_vufind_fileupload_suit', 'customdeploy_vufind_fileupload_suit')+"&custpage_category="+nlapiGetFieldValue('custpage_category');
-
             nlOpenWindow(url, 'wizard_popup','width=400,height=320,resizable=yes,scrollbars=no');
         },
 
+        //Validating saved search call related information
         validateSavedSearchCall:function()
         {
             var savedSearchId=nlapiGetFieldValue('custpage_savedsearch');
@@ -91,11 +86,10 @@ var VuFindExportSavedSearchClient = (function () {
                 validationStatus=false;
 
             }
-
-
             return validationStatus;
         }
         ,
+        //Validating File Upload call related information
         validateFileUploadCall:function()
         {
             var category=nlapiGetFieldValue('custpage_category');
@@ -105,13 +99,9 @@ var VuFindExportSavedSearchClient = (function () {
             {
                 alert('Please enter category');
                 validationStatus=false;
-
             }
-
-
             return validationStatus;
         }
-
     };
 })();
 

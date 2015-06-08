@@ -67,7 +67,7 @@ var SavedSearchResultConverter = (function () {
                         temp[y]="";
 
 
-                    if(!!temp[y] && !!colTitle && colTitle.toUpperCase() ==='IMAGE-URL')
+                    if(!!temp[y] && !!colTitle && colTitle.toUpperCase() ==='IMAGE-URL' && temp[y].indexOf('http') === -1 )
                     {
                         temp[y]=domain + temp[y];
                     }

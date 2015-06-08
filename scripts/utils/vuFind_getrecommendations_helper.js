@@ -52,13 +52,20 @@ var VuFindGetRecommendationHelper = {
         var noItemURLs = [];
         var resultArray = [];
         var itemObj;
+        var imageURL;
 
         if (!!itemsData && itemsData.length > 0) {
             for (var i = 0; i < itemsData.length; i++) {
                 if (!!itemsData[i].getValue('itemurl')) {
                     itemObj = {};
                     itemObj.itemurl = itemsData[i].getValue('itemurl');
-                    itemObj.imageurl = this.StoreDomain+itemsData[i].getValue('imageurl');
+                    imageURL=itemsData[i].getValue('imageurl');
+                    //concat domain if not exist
+                    if(!! imageURL && imageURL.indexOf('http') === -1)
+                    itemObj.imageurl = this.StoreDomain+imageURL;
+                    else
+                    itemObj.imageurl = imageURL;
+
                     itemObj.onlineprice = itemsData[i].getValue('onlineprice');
                     itemObj.storedisplayname = itemsData[i].getValue('storedisplayname');
                     itemObj.storedescription = itemsData[i].getValue('storedescription');

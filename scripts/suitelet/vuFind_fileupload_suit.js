@@ -68,18 +68,10 @@ var VuFindFileUploader = (function () {
             noteFld.setLayoutType('normal', 'startcol');
             var sampleCSVFileLink = "https://checkout.na1.netsuite.com/c.3669980/site/catalog/sample_csv_file_to_show.csv";
             var sampleTextFileLink = "https://checkout.na1.netsuite.com/c.3669980/site/catalog/sample_txt_file_to_show.txt";
-            noteFld.setDefaultValue("Only CSV and TXT files are supported. See <a href='" + sampleCSVFileLink + "' target='_blank' >Sample CSV File</a>  " +
-                "<a href='" + sampleTextFileLink + "' target='_blank' >Sample TXT File</a>");
+            noteFld.setDefaultValue("Only CSV file is supported");
             noteFld.setDisplaySize(30, 30);
-            //noteFld.setDisplayType('disabled');
-
-            //var cssFilePath = "https://system.na1.netsuite.com/c.3669980/site/css/file_upload_window.css";
-            //var html = "<link href='" + cssFilePath + "' type='text/css' rel='stylesheet'/>";
-            //fileUploadForm.addField("custpage_css_fld", "inlinehtml", "").setDefaultValue(html);
-
             var fileField = fileUploadForm.addField(fileUploadFldId, 'file', 'Select File');
             fileField.setMandatory(true);
-
             //fileUploadForm.setScript("customscript_file_upload_sl_cl");
             var guid = request.getParameter("guid");
             //VuFindCommon.logDebug("guid", guid);
@@ -91,10 +83,7 @@ var VuFindFileUploader = (function () {
             var categoryFld = fileUploadForm.addField("custpage_category", "text");
             categoryFld.setDefaultValue(request.getParameter('custpage_category'));
             categoryFld.setDisplayType("hidden");
-
-
-
-        fileUploadForm.setScript("");
+            fileUploadForm.setScript("");
             fileUploadForm.addSubmitButton("Upload");
             fileUploadForm.addResetButton();
             return fileUploadForm;
@@ -153,17 +142,14 @@ var VuFindFileUploader = (function () {
                 }
 
             } else if (request.getMethod() === 'POST') {
-
                 var folderId = null;
                 var uploadFolder = null;
-
                 /* getting folder id if exists */
                 try {
                     uploadFolder = getUploadFolder(null);
                 } catch (ex) {
                     VuFindCommon.logException("getUploadFolder", ex);
                 }
-
                 if (uploadFolder && uploadFolder.length > 0) {
                     folderId = uploadFolder[0].getId();
                 }
@@ -175,40 +161,29 @@ var VuFindFileUploader = (function () {
                         VuFindCommon.logException("createFolder", ex);
                     }
                 }
-
-
                 var file = request.getFile(fileUploadFldId);
-
-
+                var fileName;
                 /* EXCEL is returned for the csv file as well */
-                if (file.getType() === "CSV" || file.getType() === "PLAINTEXT" || file.getType() === "EXCEL") {
+                if (file.getType() === "CSV" || file.getType() === "EXCEL") {
                     /* 10 MB is the maximum supported size by Netsuite*/
                     if (file.getSize() / 1048576 <= 10) {
                         if (folderId !== null) {
-                            var guid = request.getParameter("custpage_guid");
                             var category=request.getParameter("custpage_category");
-
                             file.setFolder(parseInt(folderId));
-                            file.setName(guid + fileExtention);
+                            fileName=file.getName();
+                            nlapiLogExecution('debug','fileName',fileName);
+                            fileName=fileName.substring(0,fileName.indexOf('.csv'))+'_' + VuFindCommon.getRandomKey()+fileExtention;
+                            file.setName(fileName);
                             var id = nlapiSubmitFile(file);
-
                             var csvData = nlapiLoadFile(id).getValue();
-
-
                             if(!!csvData) {
-
                                 var csvDataObj={};
-
                                 csvDataObj.category=category;
                                 csvDataObj.csvData=csvData;
-
+                                csvDataObj.fileName=fileName;
                                 nlapiLogExecution('debug','csv data',csvData);
-
                                 VuFindDataCommunicationHelper.exportCSV(csvDataObj,VuFindDataCommunicationHelper.EXPORT_DATA_SOURCE.FILE);
                             }
-
-
-
                             response.write("<script type='text/javascript'>window.close();</script>");
                         } else {
                             response.write("Sorry, something went wrong. Please try again.");
@@ -220,7 +195,6 @@ var VuFindFileUploader = (function () {
                 } else {
                     response.write("Error : Only csv and text files are supported");
                 }
-
             }
         }
     };
@@ -234,3 +208,4 @@ var VuFindFileUploader = (function () {
 function FileUploaderSuiteletMain(request, response) {
     return VuFindFileUploader.main(request, response);
 }
+

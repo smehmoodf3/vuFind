@@ -19,7 +19,6 @@ var VuFindCommon = (function () {
          * Init method
          */
         initialize: function () {
-
         },
         /**
          * This function prints error logs in NetSuite server script or in browser console.
@@ -53,6 +52,11 @@ var VuFindCommon = (function () {
         },
         isBlankOrNull: function (str) {
             return str == null || str == undefined || typeof (str) == 'undefined' || str == 'undefined' || (str + '').trim().length == 0;
+        },
+        getRandomKey:function()
+        {
+            var randomstring = Math.random().toString(36).slice(-8);
+            return randomstring;
         }
     };
 })();

@@ -22,26 +22,33 @@ var VuFindGetRecommendations = (function() {
             var storeId;
             var storeItemId;
             var nsDomain;
+            var params={};
 
             if (request.getMethod() === "GET") {
                 try {
                     storeId = request.getParameter('storeid');
                     storeItemId = request.getParameter('storeitemid');
-                    nsDomain= storeItemId = request.getParameter('storedomain');
+                    nsDomain= request.getParameter('storedomain');
                     VuFindGetRecommendationHelper.StoreDomain=VuFindGetRecommendationHelper.getDomain(nsDomain);
+                    nlapiLogExecution('debug','storeid storeitemid nsdomain',storeId+'   ' + storeItemId + '   ' +nsDomain);
+                    params.id=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
+                    params.category=request.getParameter('cat');  //Category
+                    params.app_key=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
+                    params.token=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
+
+                    vuFindResponseData=VuFindDataCommunicationHelper.getRecommendations(params);
 
                     //TODO: Call to VuFind for recommendations
-
                     vuFindResponseData = [{
-                        'internalid': '15'
+                        'internalid': '2104'
                     }, {
-                        'internalid': '16'
+                        'internalid': '2102'
                     }, {
-                        'internalid': '49'
+                        'internalid': '2106'
                     }, {
-                        'internalid': '48'
+                        'internalid': '2107'
                     }, {
-                        'internalid': '46'
+                        'internalid': '2108'
                     }];
 
                     if (!!vuFindResponseData && vuFindResponseData) {
