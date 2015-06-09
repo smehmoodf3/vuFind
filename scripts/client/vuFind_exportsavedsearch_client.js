@@ -72,7 +72,7 @@ var VuFindExportSavedSearchClient = (function () {
         validateSavedSearchCall:function()
         {
             var savedSearchId=nlapiGetFieldValue('custpage_savedsearch');
-            var category=nlapiGetFieldValue('custpage_category');
+            var category=nlapiGetFieldValue('custpage_category').trim();
             var validationStatus=true;
 
             if(!savedSearchId)
@@ -92,7 +92,7 @@ var VuFindExportSavedSearchClient = (function () {
         //Validating File Upload call related information
         validateFileUploadCall:function()
         {
-            var category=nlapiGetFieldValue('custpage_category');
+            var category=nlapiGetFieldValue('custpage_category').trim();
             var validationStatus=true;
 
             if(!category)

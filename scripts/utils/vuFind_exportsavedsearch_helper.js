@@ -51,14 +51,20 @@ var VuFindExportSavedSearchHelper = {
     processPostCall:function(request)
     {
         try {
-            nlapiLogExecution('debug','call to processPostCall');
-            var savedSearchId = JSON.parse(request.getBody()).savedsearchId;
-            var savedSearchName=JSON.parse(request.getBody()).savedsearchName;
-            var category=JSON.parse(request.getBody()).category;
-            var domain=JSON.parse(request.getBody()).domain;
+            var dataReceived = JSON.parse(request.getBody());
+            var savedSearchId;
+            var savedSearchName;
+            var category;
+            var domain;
 
+            if(!!dataReceived)
+            {
+                savedSearchId = dataReceived.savedsearchId;
+                savedSearchName = dataReceived.savedsearchName;
+                category = dataReceived.category;
+                domain = dataReceived.domain;
+            }
             nlapiLogExecution('debug','savedSearchId',savedSearchId+'   ' + savedSearchName +'   ' + domain);
-
             var csvDataObject={};
             var responseContent={};
             if (!!savedSearchId) {

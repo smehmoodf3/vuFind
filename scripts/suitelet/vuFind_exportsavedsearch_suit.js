@@ -20,25 +20,16 @@ var VuFindExportSavedSearchSuit = (function () {
          * main method
          */
         main: function (request, response) {
-
             var responseContent;
-
             if(request.getMethod() === 'GET')
             {
-
                 responseContent=VuFindExportSavedSearchHelper.getForm(request);
                 response.writePage(responseContent);
-
             }else if(request.getMethod() === 'POST')
             {
-
                 responseContent=VuFindExportSavedSearchHelper.processPostCall(request);
-
-
                 response.write(JSON.stringify(responseContent));
-
             }
-
         }
     };
 })();

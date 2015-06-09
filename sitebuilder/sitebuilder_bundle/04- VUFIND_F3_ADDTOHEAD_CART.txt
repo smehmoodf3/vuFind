@@ -1,0 +1,60 @@
+<script  type="text/javascript">
+
+var winhref =window.location.href;
+
+if(winhref.indexOf("sc=3") > 0 || winhref.indexOf("sc.3") > 0 )
+{
+(function($){
+
+$(document).ready(function(){
+
+var itemLines = $('.uir-list-row-tr');
+var existingVuFindItemsInCart=[];
+
+for(var i=0;i<itemLines.length;i++)
+{
+
+var hrefUrl = $('#remove'+i).parent().parent().find('.carttablecellproductname').find('a')[0].href;
+var itemInternalId;
+var existingVuFindItemsInCart;
+
+hrefUrl = hrefUrl.substring(hrefUrl.indexOf('id'),hrefUrl.length);
+hrefUrl = hrefUrl.substring(0,hrefUrl.indexOf('/'));
+itemInternalId = hrefUrl.split('.')[1];
+
+$('#remove'+i).click(function(e){
+    existingVuFindItemsInCart=window.localStorage.getItem('VuFindItemsInCart');
+	if(!!existingVuFindItemsInCart && existingVuFindItemsInCart.length>0)
+	  existingVuFindItemsInCart=JSON.parse(existingVuFindItemsInCart);
+
+  	existingVuFindItemsInCart=getUpdatedList(itemInternalId,existingVuFindItemsInCart);
+	window.localStorage.setItem('VuFindItemsInCart', JSON.stringify(existingVuFindItemsInCart));
+}
+
+);
+}
+
+
+}
+
+})(jQuery);
+}
+
+function getUpdatedList(internalId,listData)
+{
+    var exist=false;
+    var updatedList=[];
+    if(!!internalId && !!listData)
+    {
+        for(var i=0;i<listData.length;i++)
+        {
+            if(listData[i].internalid !== internalId)
+            {
+		updatedList.push(listData[i]);
+            }
+        }
+    }
+    return updatedList;
+}
+
+</script>
