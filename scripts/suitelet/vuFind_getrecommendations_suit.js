@@ -11,7 +11,6 @@ var VuFindGetRecommendations = (function() {
          * main method
          */
         main: function(request, response) {
-
             var recommendationObj = {};
             var recommendations;
             var responseData = {};
@@ -23,37 +22,31 @@ var VuFindGetRecommendations = (function() {
             var storeItemId;
             var nsDomain;
             var params={};
+            var skusFromVuFind;
+            var recommendedItems;
 
             if (request.getMethod() === "GET") {
                 try {
                     storeId = request.getParameter('storeid');
                     storeItemId = request.getParameter('storeitemid');
-                    nsDomain= request.getParameter('storedomain');
+                    nsDomain = request.getParameter('storedomain');
                     VuFindGetRecommendationHelper.StoreDomain=VuFindGetRecommendationHelper.getDomain(nsDomain);
                     nlapiLogExecution('debug','storeid storeitemid nsdomain',storeId+'   ' + storeItemId + '   ' +nsDomain);
-                    params.id=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
-                    params.category=request.getParameter('cat');  //Category
-                    params.app_key=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
-                    params.token=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
+                    params.id = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
+                    //params.category=request.getParameter('cat');  //Category
+                    params.category='men-shoes'; //category
+                    params.app_key = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
+                    params.token = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
+                    params.imageURL = nlapiLookupField('item',storeItemId,'custitem_vufind_imageurl');
+                    vuFindResponseData = VuFindDataCommunicationHelper.getRecommendations(params);
+                    skusFromVuFind = VuFindGetRecommendationHelper.extractSkuFromVuFindRecommendations(vuFindResponseData);
+                    nlapiLogExecution('debug','skusFromVuFind',JSON.stringify(skusFromVuFind));
+                    recommendedItems = VuFindGetRecommendationHelper.getInternalIdsBySku(skusFromVuFind);
+                    nlapiLogExecution('debug','recommendedItems',JSON.stringify(recommendedItems));
 
-                    vuFindResponseData=VuFindDataCommunicationHelper.getRecommendations(params);
-
-                    //TODO: Call to VuFind for recommendations
-                    vuFindResponseData = [{
-                        'internalid': '2104'
-                    }, {
-                        'internalid': '2102'
-                    }, {
-                        'internalid': '2106'
-                    }, {
-                        'internalid': '2107'
-                    }, {
-                        'internalid': '2108'
-                    }];
-
-                    if (!!vuFindResponseData && vuFindResponseData) {
-                        internalIds = _.pluck(vuFindResponseData, 'internalid');
-
+                    if (!!recommendedItems && recommendedItems) {
+                        //internalIds = _.pluck(recommendedItems, 'internalid');
+                        internalIds = recommendedItems;
                         if (!!internalIds && internalIds.length > 0) {
                             recommendations = VuFindGetRecommendationHelper.getItemInformations(internalIds, storeId);
                         }
@@ -61,15 +54,13 @@ var VuFindGetRecommendations = (function() {
                         responseData.status = 'success';
                     }
                 } catch (ex) {
-                    VuFindCommon.logException("error in getreceoomendations suitelet", ex);
+                    VuFindCommon.logException("error in getreceomendations suitelet", ex);
                     responseData.status = 'fail';
                     responseData.msg = 'No Recommendations';
                     responseData.errorMsg = ex.toString();
                 }
-
                 responseData = 'vuFindRecommendations(' + JSON.stringify(responseData) + ')';
                 response.write(responseData);
-
             }
         }
     };

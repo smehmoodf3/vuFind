@@ -32,6 +32,7 @@ var VuFindGetRecommendationHelper = {
 
         //Find Items having Website is equal to parameter websiteId and Parameter internalIds
         itemsData = nlapiSearchRecord('item', null, [new nlobjSearchFilter('internalid', null, 'anyof', internalIds), new nlobjSearchFilter('website', null, 'anyof', websiteId)], cols);
+        if(!!itemsData)
         //Is Items Found
         itemInfoObjectArray = this.getItemInfoObjectArray(itemsData);
         noItemURLs = _.difference(internalIds, _.pluck(itemInfoObjectArray, 'internalid'));
@@ -84,6 +85,49 @@ var VuFindGetRecommendationHelper = {
             return 'https://system.na1.netsuite.com';
         } else {
             return 'https://system.netsuite.com';
+        }
+
+        return resultArray;
+    },
+    /* Function to get internalid by sku/itemid
+     * @param {array} skus are the itemid in netsuite
+     */
+    getInternalIdsBySku: function(skus) {
+        var filters=[];
+        var filterEntry;
+        var itemsData;
+        var resultArray=[];
+
+        if(!!skus && skus.length)
+        {
+            for(var i=0;i<skus.length;i++) {
+                filterEntry = ['itemid', 'is', skus[i]];
+                filters.push(filterEntry);
+                filters.push('or');
+            }
+            filters.pop();
+        }
+        itemsData = nlapiSearchRecord('item', null,filters);
+        if(!!itemsData && itemsData.length>0)
+            for(var i=0;i<skus.length;i++) {
+                resultArray.push(itemsData[i].getId());
+            }
+        return resultArray;
+    },
+    /* Function to extract skus from vufind recommendation response
+     * @param {object} vufind response JSON body
+     */
+    extractSkuFromVuFindRecommendations: function(vuFindResponse) {
+        var resultArray=[];
+        var jsonRecommendationsData;
+
+        if(!!vuFindResponse && !!vuFindResponse.Data && !!vuFindResponse.Data.VufindRecommends) {
+
+            jsonRecommendationsData = JSON.parse(vuFindResponse.Data.VufindRecommends);
+
+            for (var i = 0; i < jsonRecommendationsData.length; i++) {
+                resultArray.push(jsonRecommendationsData[i].id);
+            }
         }
 
         return resultArray;

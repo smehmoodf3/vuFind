@@ -59,13 +59,25 @@ var VuFindDataCommunicationHelper = (function () {
         ,
         getRecommendations: function (params) {
             try {
+                var responseBody;
+                var vuFindResponse;
+                var urlForRecommendations = VuFindConfigurationSettings.VUFIND_GET_RECOMMENDATIONS_URL_VUMATCH;
+                urlForRecommendations = urlForRecommendations+'?customer_id='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
+                urlForRecommendations = urlForRecommendations+'&cat='+params.category;
+                urlForRecommendations = urlForRecommendations+'&url='+params.imageURL;
+                urlForRecommendations = urlForRecommendations+'&app_key='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
+                urlForRecommendations = urlForRecommendations+'&token='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
+                vuFindResponse=nlapiRequestURL(urlForRecommendations);
+                responseBody = vuFindResponse.getBody();
 
-                var vuFindResponse=nlapiRequestURL(VuFindConfigurationSettings.VUFIND_GET_RECOMMENDATIONS_URL);
-                return vuFindResponse.getBody();
+                if(responseBody.indexOf('<') > -1 )
+                    responseBody = responseBody.substring(0,responseBody.indexOf('<'));
+                 responseBody=JSON.parse(responseBody);
 
+                 return responseBody;
             }catch(ex)
             {
-                nlapiLogExecution('debug','Error in getRecommendations',ex.toString());
+                nlapiLogExecution('debug','Error in getRecommendations Call',ex.toString());
             }
         }
     };

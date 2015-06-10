@@ -21,6 +21,6 @@ var VuFindConfigurationSettings = (function () {
        ,VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY:'dee1eb769deb1c7ed850fc2ab18c31e7'
        ,VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN:'3hbv1ionxeoyl9pzsy49e7bl5yh45i830nxuono4vzq309ii80whj9mu022rwge7'
        ,VUFIND_TRACK_CALL_URL:'http://api7.vufind.com/track'
-       ,VUFIND_GET_RECOMMENDATIONS_URL:'http://api9.vufind.com/vumatch/vustyle.php'
+       ,VUFIND_GET_RECOMMENDATIONS_URL_VUMATCH:'http://api9.vufind.com/vumatch/vumatch.php'
     };
 })();
