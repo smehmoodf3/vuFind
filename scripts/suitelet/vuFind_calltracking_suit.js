@@ -14,33 +14,33 @@ var VuFindCallTracking = (function() {
             var params={};
             var dataReceived = JSON.parse(request.getBody());
             var itemInformation;
+            var itemRecordInformation;
+            var category;
+            var response;
 
-            params.id=VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
-            params.category=request.getParameter('c');  //Category
-            params.sku=request.getParameter('sku');     //Unique Item Identifier
-            params.trackType=request.getParameter('t'); //t=c: click  t=a: add-to-cart    t=p: purchase
-            params.imageURL=request.getParameter('u'); //Image URL
-
-            if (request.getMethod() === "GET") {
+            if (request.getMethod() === "POST") {
                 try {
                     if(!!dataReceived && dataReceived.length) {
                         for(var d=0;d<dataReceived.length;d++) {
                             params = {};
                             params.id = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
-                            params.sku = dataReceived[d].internalid;
+                            //Getting information from item record
+                            itemRecordInformation = nlapiLookupField('item',dataReceived[d].internalid,['custitem_vufind_imageurl','category','itemid']);
+                            params.sku = itemRecordInformation.itemid;
                             params.trackType = dataReceived[d].t; //t=c: click  t=a: add-to-cart    t=p: purchase
-                            params.category = nlapiLookupField('item',params.sku,['itemurl','category']);
-                            params.imageURL = request.getParameter('u'); //Image URL
-                            VuFindDataCommunicationHelper.trackCall(params);
+                            category = itemRecordInformation.category;
+                            //Getting last part of category
+                            params.category = category.substring(category.lastIndexOf('>')+1,category.length).trim();
+                            params.imageURL = itemRecordInformation.custitem_vufind_imageurl;
+                            nlapiLogExecution('debug','Tracking Call Received',JSON.stringify(params));
+                            response = VuFindDataCommunicationHelper.trackCall(params);
+                            nlapiLogExecution('debug','Response Request Id',response);
                         }
                     }
                 } catch (ex) {
-                    VuFindCommon.logException("error in VuFindCallTracking suitelet", ex);
-                    responseData.status = 'fail';
-                    responseData.msg = 'Not Tracked';
-                    responseData.errorMsg = ex.toString();
+                    nlapiLogExecution('debug',"error in VuFindCallTracking suitelet", ex.toString());
                 }
-                response.write(responseData);
+                //response.write(responseData);
             }
         }
     };

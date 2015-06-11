@@ -34,32 +34,26 @@ var VuFindGetRecommendations = (function() {
                     nlapiLogExecution('debug','storeid storeitemid nsdomain',storeId+'   ' + storeItemId + '   ' +nsDomain);
                     params.id = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
                     //params.category=request.getParameter('cat');  //Category
+                    //TODO: extract category and image url in one nlapilookup call
                     params.category='men-shoes'; //category
+                    params.imageURL = nlapiLookupField('item',storeItemId,'custitem_vufind_imageurl');
                     params.app_key = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
                     params.token = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
-                    params.imageURL = nlapiLookupField('item',storeItemId,'custitem_vufind_imageurl');
-                    vuFindResponseData = VuFindDataCommunicationHelper.getRecommendations(params);
-                    skusFromVuFind = VuFindGetRecommendationHelper.extractSkuFromVuFindRecommendations(vuFindResponseData);
-                    nlapiLogExecution('debug','skusFromVuFind',JSON.stringify(skusFromVuFind));
-                    recommendedItems = VuFindGetRecommendationHelper.getInternalIdsBySku(skusFromVuFind);
-                    nlapiLogExecution('debug','recommendedItems',JSON.stringify(recommendedItems));
 
-                    if (!!recommendedItems && recommendedItems) {
-                        //internalIds = _.pluck(recommendedItems, 'internalid');
-                        internalIds = recommendedItems;
-                        if (!!internalIds && internalIds.length > 0) {
-                            recommendations = VuFindGetRecommendationHelper.getItemInformations(internalIds, storeId);
-                        }
-                        responseData.recommendations = recommendations;
-                        responseData.status = 'success';
-                    }
+                    vuFindResponseData = VuFindDataCommunicationHelper.getRecommendations(params,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH);
+                    responseData.recommendations = VuFindGetRecommendationHelper.getClientSideRecommendationData(vuFindResponseData,storeId,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH);
+                    vuFindResponseData = VuFindDataCommunicationHelper.getRecommendations(params,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUSTYLE);
+                    responseData.recommendationsVuStyle = VuFindGetRecommendationHelper.getClientSideRecommendationData(vuFindResponseData,storeId,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUSTYLE);
+
+                    responseData.status = 'success';
+
                 } catch (ex) {
                     VuFindCommon.logException("error in getreceomendations suitelet", ex);
                     responseData.status = 'fail';
                     responseData.msg = 'No Recommendations';
                     responseData.errorMsg = ex.toString();
                 }
-                responseData = 'vuFindRecommendations(' + JSON.stringify(responseData) + ')';
+                responseData = 'VuFindTemplatesHelper.vuFindRecommendations(' + JSON.stringify(responseData) + ')';
                 response.write(responseData);
             }
         }

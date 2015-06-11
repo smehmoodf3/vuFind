@@ -14,6 +14,8 @@ var VuFindGetRecommendationHelper = {
     ,
     StoreDomain:''
     ,
+    RECOMMENDATION_TYPE:{VUMATCH:'vumatch',VUSTYLE:'vustyle'}
+    ,
     /* Function to get Item Fields Data
      * @param {array} internalIds - internal ids of items
      * @param {string} websiteId -  website id
@@ -117,19 +119,87 @@ var VuFindGetRecommendationHelper = {
     /* Function to extract skus from vufind recommendation response
      * @param {object} vufind response JSON body
      */
-    extractSkuFromVuFindRecommendations: function(vuFindResponse) {
+    extractSkuFromVuFindRecommendations: function(vuFindResponse,recommendationType) {
         var resultArray=[];
         var jsonRecommendationsData;
 
-        if(!!vuFindResponse && !!vuFindResponse.Data && !!vuFindResponse.Data.VufindRecommends) {
+        switch (recommendationType) {
+            case VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH :
+                if(!!vuFindResponse && !!vuFindResponse.Data && !!vuFindResponse.Data.VufindRecommends) {
+                    jsonRecommendationsData = JSON.parse(vuFindResponse.Data.VufindRecommends);
+                    for (var i = 0; i < jsonRecommendationsData.length; i++) {
+                        resultArray.push(jsonRecommendationsData[i].id);
+                    }
+                }
+                break;
+            case VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUSTYLE :
 
-            jsonRecommendationsData = JSON.parse(vuFindResponse.Data.VufindRecommends);
+                break;
+        }
 
-            for (var i = 0; i < jsonRecommendationsData.length; i++) {
+
+
+        return resultArray;
+    }
+    ,
+
+    /* Function to extract skus from vufind recommendation response
+     * @param {object} vufind response JSON body
+     */
+    /*
+    extractSkuFromVuFindRecommendations: function(vuFindResponse,recommendationType) {
+        var resultArray=[];
+        var jsonRecommendationsData=[];
+        var vuFindResponseObject;
+        var vuFindRecommendsArray;
+
+        //vuFindResponse = JSON.stringify(vuFindResponse);
+
+        nlapiLogExecution('debug','vuFindResponse',vuFindResponse);
+
+        if(!!vuFindResponse) {
+
+            vuFindResponse = vuFindResponse.replace(/:\"\[/gi, ':[');
+            vuFindResponse = vuFindResponse.replace(/\]\"/gi, ']');
+            vuFindResponseObject = JSON.parse(vuFindResponse);
+        }
+
+        if(!!vuFindResponseObject && !!vuFindResponseObject.Data && !!vuFindResponseObject.Data.VufindRecommends && vuFindResponseObject.Data.VufindRecommends.length>0) {
+            vuFindRecommendsArray = vuFindResponseObject.Data.VufindRecommends;
+                if(recommendationType === this.RECOMMENDATION_TYPE.VUSTYLE)
+                    for(var c=0;c<vuFindRecommendsArray.length;c++)
+                    {
+                        console.log(vuFindRecommendsArray[c]);
+                        jsonRecommendationsData = jsonRecommendationsData.concat(vuFindRecommendsArray[c].recos);
+                    }
+                else
+                    jsonRecommendationsData = vuFindRecommendsArray;
+
+                for (var i = 0; i < jsonRecommendationsData.length; i++) {
                 resultArray.push(jsonRecommendationsData[i].id);
             }
         }
-
         return resultArray;
+    },
+    */
+    /* Function to get final data to send to client/browser
+     * @param {object} vuFindResponse response JSON body
+     * @param {string} storeId is the webstore id from which recommendation request is raised
+     */
+    getClientSideRecommendationData: function(vuFindResponse,storeId,recommendationType) {
+        nlapiLogExecution('debug','vuFindResponse:getClientSideRecommendationData',JSON.stringify(vuFindResponse));
+        var skusFromVuFind = this.extractSkuFromVuFindRecommendations(vuFindResponse,recommendationType);
+        nlapiLogExecution('debug','skusFromVuFind:getClientSideRecommendationData',JSON.stringify(skusFromVuFind));
+        var recommendedItems = this.getInternalIdsBySku(skusFromVuFind);
+        nlapiLogExecution('debug','recommendedItems:getClientSideRecommendationData',JSON.stringify(recommendedItems));
+        var internalIds;
+        var recommendations=[];
+        if (!!recommendedItems && recommendedItems) {
+            internalIds = recommendedItems;
+            if (!!internalIds && internalIds.length > 0) {
+                recommendations = this.getItemInformations(internalIds, storeId);
+            }
+        }
+        return recommendations;
     }
 };

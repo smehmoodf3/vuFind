@@ -16,9 +16,8 @@
  */
 var VuFindDataCommunicationHelper = (function () {
     return {
-
         EXPORT_DATA_SOURCE:{SAVEDSEARCH:'Saved Search',FILE:'File'}
-        ,exportCSV: function (csvDataObj,source) {
+       ,exportCSV: function (csvDataObj,source) {
             //TODO: Http Call to VuFind Server for CSV data export
             var requestBody={};
             var vuFindResponse;
@@ -50,31 +49,58 @@ var VuFindDataCommunicationHelper = (function () {
         ,
         trackCall: function (params) {
             try {
-                var vuFindResponse = nlapiRequestURL(VuFindConfigurationSettings.VUFIND_TRACK_CALL_URL);
+                var responseHeader;
+                var vuFindResponse;
+                var urlForTrackingCall = VuFindConfigurationSettings.VUFIND_TRACK_CALL_URL;
+                urlForTrackingCall = urlForTrackingCall+'?id='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
+                urlForTrackingCall = urlForTrackingCall+'&c='+params.category;
+                urlForTrackingCall = urlForTrackingCall+'&sku='+params.sku;
+                urlForTrackingCall = urlForTrackingCall+'&t='+params.trackType;
+                urlForTrackingCall = urlForTrackingCall+'&u='+params.imageURL;
+                nlapiLogExecution('debug','urlForTrackingCall',urlForTrackingCall);
+                vuFindResponse = nlapiRequestURL(urlForTrackingCall);
+                responseHeader = vuFindResponse.getHeader("Request-Id");
+                return responseHeader;
             }catch(ex)
             {
                 nlapiLogExecution('debug','Error in trackCall',ex.toString());
             }
         }
         ,
-        getRecommendations: function (params) {
+        getRecommendations: function (params,recommendationType) {
             try {
                 var responseBody;
                 var vuFindResponse;
-                var urlForRecommendations = VuFindConfigurationSettings.VUFIND_GET_RECOMMENDATIONS_URL_VUMATCH;
+                var urlForRecommendations;
+
+                switch (recommendationType) {
+                    case VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH :
+                        urlForRecommendations=VuFindConfigurationSettings.VUFIND_GET_RECOMMENDATIONS_URL_VUMATCH;
+                        break;
+                    case VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUSTYLE :
+                        urlForRecommendations=VuFindConfigurationSettings.VUFIND_GET_RECOMMENDATIONS_URL_VUSTYLE;
+                        break;
+                }
                 urlForRecommendations = urlForRecommendations+'?customer_id='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
                 urlForRecommendations = urlForRecommendations+'&cat='+params.category;
                 urlForRecommendations = urlForRecommendations+'&url='+params.imageURL;
                 urlForRecommendations = urlForRecommendations+'&app_key='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
                 urlForRecommendations = urlForRecommendations+'&token='+VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
+
+                nlapiLogExecution('debug','recommendationType',recommendationType);
+                nlapiLogExecution('debug','urlForRecommendations',urlForRecommendations);
                 vuFindResponse=nlapiRequestURL(urlForRecommendations);
                 responseBody = vuFindResponse.getBody();
 
                 if(responseBody.indexOf('<') > -1 )
                     responseBody = responseBody.substring(0,responseBody.indexOf('<'));
-                 responseBody=JSON.parse(responseBody);
 
-                 return responseBody;
+                //if(recommendationType === VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH) {
+                responseBody=JSON.parse(responseBody);
+                //}
+
+                return responseBody;
+
             }catch(ex)
             {
                 nlapiLogExecution('debug','Error in getRecommendations Call',ex.toString());

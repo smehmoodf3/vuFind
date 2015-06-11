@@ -20,64 +20,10 @@ suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommend
 
 $.ajax({ url: suiteletUrl,
          dataType: "jsonp",
-         jsonpCallback: 'vuFindRecommendations'
+         jsonpCallback: 'VuFindTemplatesHelper.vuFindRecommendations()'
        });
 });
 })(jQuery);
 
-
-
-function vuFindRecommendations(data)
-{
-
-(function($){
- var recommendations;
- var htmlData='';
- var itemURL;
- var itemImg;
- var itemDesc;
- var itemInternalId;
- var temp;
-
-    if(!!data)
-    {
-        recommendations=data.recommendations;
-        if(!!recommendations &&recommendations.length>0)
-        {
-            if(recommendations.length)
-            {
-                for(var r=0;r<recommendations.length;r++)
-                    {
-                        htmlData='';
-                        itemURL=recommendations[r].itemurl;
-                        itemImg=recommendations[r].imageurl;
-                        itemDesc=recommendations[r].storedisplayname;
-                        itemDetailDesc=recommendations[r].storedescription;
-                        htmlData=htmlData+'<a href="'+itemURL+'" id="vuFindClickTrack"><img src="'+itemImg+'"></a>';
-                        htmlData=htmlData+'<br/>  '+itemDesc;
-                        htmlData=htmlData+'<br/>  '+itemDetailDesc;
-                        $('<li/>', {html: htmlData}).appendTo('ul.recommendationsList');
-                    }
-            }
-        }
-
-        // Starting BxSlider
-          $('.recommendationsList').bxSlider({
-          minSlides: 3,
-          maxSlides: 4,
-          slideWidth: 220
-        // ,slideMargin: 10
-        // ,auto:true
-         //,controls:true	//Left Right Button
-         //,pager:true	// Slide Selector .. dots to select slided
-         //,autoStart:false
-        });
-    }
-
-})(jQuery);
-
-//alert(JSON.stringify(data));
-
-}
 
 </script>

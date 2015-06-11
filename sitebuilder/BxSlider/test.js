@@ -1,37 +1,28 @@
-(function ($) {
-    var clickTrackURL;
-    var postData = {};
-    var postDataArray = [];
-    var existingVuFindItemsInCart = [];
+<!-- Google Analytics eCommerce Tracking Code -->
 
-    clickTrackURL = "/app/site/hosting/scriptlet.nl?script=customscript_vufind_calltracking_suit&deploy=customdeploy_vufind_calltracking_suit";
 
-    existingVuFindItemsInCart = window.localStorage.getItem('VuFindItemsInCart');
+function googlePushOrder1() {
+    try {
+        if (document.URL.indexOf("thanks") != -1) {
 
-    if (!!existingVuFindItemsInCart)
-        existingVuFindItemsInCart = JSON.parse(existingVuFindItemsInCart);
-    else
-        existingVuFindItemsInCart = [];
+            var rows = document.getElementById("ordersummary_total").parentNode.rows;
 
-    if (!!existingVuFindItemsInCart && existingVuFindItemsInCart.length > 0) {
-        for (var p = 0; p < existingVuFindItemsInCart.length; p++) {
-            postData = {};
-            postData.internalid = existingVuFindItemsInCart[p].internalid;
-            postData.t = 'p';
-            postDataArray.push(postData);
+
+            for (var i = 0; i < rows.length; i++) {
+                try {
+                    var skuName = rows[i].cells[2].innerHTML;
+                    var qty = rows[i].cells[5].innerHTML;
+                    var prodName = rows[i].cells[3].innerHTML;
+                    var price = rows[i].cells[6].innerHTML;
+                }
+                catch (e) {
+                    //alert('in catch 2  '+e);
+                }
+            }
         }
-        jQuery.ajax({
-            type: "POST",
-            url: clickTrackURL,
-            data: JSON.stringify(postDataArray),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json"
-        });
     }
-    //clear local storage
-    window.localStorage.setItem('VuFindItemsInCart', null);
-    window.localStorage.setItem('vuFindClickedItem', null);
-
-
-})(jQuery);
+    catch (e) {
+        //alert(e);
+    }
+}
 

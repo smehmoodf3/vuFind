@@ -27,7 +27,7 @@ $('#remove'+i).click(function(e){
 	if(!!existingVuFindItemsInCart && existingVuFindItemsInCart.length>0)
 	  existingVuFindItemsInCart=JSON.parse(existingVuFindItemsInCart);
 
-  	existingVuFindItemsInCart=getUpdatedList(itemInternalId,existingVuFindItemsInCart);
+  	existingVuFindItemsInCart=VuFindTemplatesHelper.getUpdatedList(itemInternalId,existingVuFindItemsInCart);
 	window.localStorage.setItem('VuFindItemsInCart', JSON.stringify(existingVuFindItemsInCart));
 }
 
@@ -40,21 +40,6 @@ $('#remove'+i).click(function(e){
 })(jQuery);
 }
 
-function getUpdatedList(internalId,listData)
-{
-    var exist=false;
-    var updatedList=[];
-    if(!!internalId && !!listData)
-    {
-        for(var i=0;i<listData.length;i++)
-        {
-            if(listData[i].internalid !== internalId)
-            {
-		updatedList.push(listData[i]);
-            }
-        }
-    }
-    return updatedList;
-}
+
 
 </script>
