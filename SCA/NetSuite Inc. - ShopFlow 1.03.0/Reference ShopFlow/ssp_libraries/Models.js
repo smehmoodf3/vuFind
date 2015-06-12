@@ -100,7 +100,6 @@ Application.defineModel('SiteSettings', {
 		return settings;
 	}
 });
-
 //Profile_tmp_Shopping.js
 // Profile.js
 // ----------
@@ -125,7 +124,6 @@ Application.defineModel('Profile', {
 		return profile;
 	}
 });
-
 //LiveOrder.js
 // LiveOrder.js
 // -------
@@ -892,13 +890,10 @@ Application.defineModel('LiveOrder', {
 		});
 	}
 });
-
-
 //ProductReviews.js
 // ProductReview.js
 // ----------------
 // Handles creating, fetching and updating ProductReviews
-
 Application.defineModel('ProductReview', {
 	// ## General settings
 	// maxFlagsCount is the number at which a review is marked as flagged by users
@@ -1168,7 +1163,6 @@ Application.defineModel('ProductReview', {
 		}
 	}
 });
-
 //StoreItem.js
 // StoreItem.js
 // ----------
@@ -1323,13 +1317,10 @@ Application.defineModel('StoreItem', {
 	}
 
 });
-
-
 //ProductList.js
 // ProductList.js
 // ----------------
 // Handles creating, fetching and updating Product Lists
-
 Application.defineModel('ProductList', {
 	// ## General settings
 	loginRequired: SC.Configuration.product_lists.loginRequired
@@ -1589,13 +1580,10 @@ Application.defineModel('ProductList', {
 		return internalid;
 	}
 });
-
-
 //ProductListItem.js
 // ProductListItem.js
 // ----------------
 // Handles creating, fetching and updating Product List Items
-
 Application.defineModel('ProductListItem', {
 
 	// General settings
