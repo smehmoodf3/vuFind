@@ -94,17 +94,13 @@ var VuFindDataCommunicationHelper = (function () {
 
                 if(responseBody.indexOf('<') > -1 )
                     responseBody = responseBody.substring(0,responseBody.indexOf('<'));
-
-                //if(recommendationType === VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH) {
                 responseBody=JSON.parse(responseBody);
-                //}
-
-                return responseBody;
-
             }catch(ex)
             {
                 nlapiLogExecution('debug','Error in getRecommendations Call',ex.toString());
+                responseBody = null;
             }
+            return responseBody;
         }
     };
 })();

@@ -15,15 +15,19 @@ var VuFindTemplatesHelper = {
     vuFindRecommendations: function (data) {
         (function ($) {
             var recommendations;
+            var vuStylerecommendations;
             var htmlData = '';
             var itemURL;
             var itemImg;
             var itemDesc;
             var itemInternalId;
             var temp;
+            var itemDetailDesc;
 
-            if (!!data) {
+            if (!!data && data.status !== 'fail') {
                 recommendations = data.recommendations;
+                vuStylerecommendations = data.recommendationsVuStyle;
+                console.log('server data' + JSON.stringify(data));
                 if (!!recommendations && recommendations.length > 0) {
                     if (recommendations.length) {
                         for (var r = 0; r < recommendations.length; r++) {
@@ -35,21 +39,44 @@ var VuFindTemplatesHelper = {
                             htmlData = htmlData + '<a href="' + itemURL + '" class="vuFindClickTrack" data-id="'+recommendations[r].internalid+'"><img src="' + itemImg + '"></a>';
                             htmlData = htmlData + '<br/>  ' + itemDesc;
                             htmlData = htmlData + '<br/>  ' + itemDetailDesc;
+
                             $('<li/>', {html: htmlData}).appendTo('ul.recommendationsList');
+
                         }
                     }
+                    $('.vumatchheading').show();
                 }
+                else
+                    $('.vufind_f3_bxslider').hide();
 
-                // Starting BxSlider
+                if (!!vuStylerecommendations && vuStylerecommendations.length > 0) {
+                    for (var r = 0; r < vuStylerecommendations.length; r++) {
+                        htmlData = '';
+                        itemURL = vuStylerecommendations[r].itemurl;
+                        itemImg = vuStylerecommendations[r].imageurl;
+                        itemDesc = vuStylerecommendations[r].storedisplayname;
+                        itemDetailDesc = vuStylerecommendations[r].storedescription;
+                        htmlData = htmlData + '<a href="' + itemURL + '" class="vuFindClickTrackVuStyle" data-id="'+vuStylerecommendations[r].internalid+'"><img src="' + itemImg + '"></a>';
+                        htmlData = htmlData + '<br/>  ' + itemDesc;
+                        htmlData = htmlData + '<br/>  ' + itemDetailDesc;
+                        $('<li/>', {html: htmlData}).appendTo('ul.recommendationsListVuStyle');
+                    }
+                    $('.vustyleheading').show();
+                }
+                else
+                    $('.vufind_f3_bxslider_vustyle').hide();
+
+                // Starting BxSlider for VuMatch
                 $('.recommendationsList').bxSlider({
                     minSlides: 3,
                     maxSlides: 4,
                     slideWidth: 220
-                    // ,slideMargin: 10
-                    // ,auto:true
-                    //,controls:true	//Left Right Button
-                    //,pager:true	// Slide Selector .. dots to select slided
-                    //,autoStart:false
+                });
+                // Starting BxSlider for VuStyle
+                $('.recommendationsListVuStyle').bxSlider({
+                    minSlides: 3,
+                    maxSlides: 4,
+                    slideWidth: 220
                 });
                 //associting click event for call tracking
                 VuFindTemplatesHelper.addVuFindClickEvent();

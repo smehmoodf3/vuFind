@@ -24,27 +24,34 @@ var VuFindGetRecommendations = (function() {
             var params={};
             var skusFromVuFind;
             var recommendedItems;
+            var itemRecordInformation;
+            var category;
 
             if (request.getMethod() === "GET") {
                 try {
                     storeId = request.getParameter('storeid');
                     storeItemId = request.getParameter('storeitemid');
                     nsDomain = request.getParameter('storedomain');
+                    itemRecordInformation = nlapiLookupField('item',storeItemId,['custitem_vufind_imageurl','category','itemid']);
+                    category = itemRecordInformation.category;
                     VuFindGetRecommendationHelper.StoreDomain=VuFindGetRecommendationHelper.getDomain(nsDomain);
                     nlapiLogExecution('debug','storeid storeitemid nsdomain',storeId+'   ' + storeItemId + '   ' +nsDomain);
                     params.id = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
                     //params.category=request.getParameter('cat');  //Category
                     //TODO: extract category and image url in one nlapilookup call
-                    params.category='men-shoes'; //category
-                    params.imageURL = nlapiLookupField('item',storeItemId,'custitem_vufind_imageurl');
+                    params.category = category.substring(category.lastIndexOf('>')+1,category.length).trim();
+                    params.imageURL = itemRecordInformation.custitem_vufind_imageurl;
                     params.app_key = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
                     params.token = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;
 
                     vuFindResponseData = VuFindDataCommunicationHelper.getRecommendations(params,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH);
+                    if( vuFindResponseData === null)
+                        throw new Error('Error in getting vumatch recommendation');
                     responseData.recommendations = VuFindGetRecommendationHelper.getClientSideRecommendationData(vuFindResponseData,storeId,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUMATCH);
                     vuFindResponseData = VuFindDataCommunicationHelper.getRecommendations(params,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUSTYLE);
+                    if( vuFindResponseData === null)
+                        throw new Error('Error in getting vustyle recommendation');
                     responseData.recommendationsVuStyle = VuFindGetRecommendationHelper.getClientSideRecommendationData(vuFindResponseData,storeId,VuFindGetRecommendationHelper.RECOMMENDATION_TYPE.VUSTYLE);
-
                     responseData.status = 'success';
 
                 } catch (ex) {

@@ -23,6 +23,7 @@ $.ajax({ url: suiteletUrl,
          jsonpCallback: 'VuFindTemplatesHelper.vuFindRecommendations()'
        });
 });
+
 })(jQuery);
 
 
