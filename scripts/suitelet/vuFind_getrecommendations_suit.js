@@ -32,14 +32,22 @@ var VuFindGetRecommendations = (function() {
                     storeId = request.getParameter('storeid');
                     storeItemId = request.getParameter('storeitemid');
                     nsDomain = request.getParameter('storedomain');
-                    itemRecordInformation = nlapiLookupField('item',storeItemId,['custitem_vufind_imageurl','category','itemid']);
-                    category = itemRecordInformation.category;
+                    itemRecordInformation = nlapiLookupField('item',storeItemId,['custitem_vufind_imageurl','category','itemid','custitem_vufind_category']);
+                    if(!! itemRecordInformation.custitem_vufind_category )
+                    {
+                        params.category = itemRecordInformation.custitem_vufind_category;
+                    }
+                    else
+                    {
+                        category = itemRecordInformation.category;
+                        if(!!category) params.category = category.substring(category.lastIndexOf('>') + 1, category.length).trim();
+                    }
                     VuFindGetRecommendationHelper.StoreDomain=VuFindGetRecommendationHelper.getDomain(nsDomain);
                     nlapiLogExecution('debug','storeid storeitemid nsdomain',storeId+'   ' + storeItemId + '   ' +nsDomain);
                     params.id = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_CUSTOMERID;
                     //params.category=request.getParameter('cat');  //Category
                     //TODO: extract category and image url in one nlapilookup call
-                    params.category = category.substring(category.lastIndexOf('>')+1,category.length).trim();
+
                     params.imageURL = itemRecordInformation.custitem_vufind_imageurl;
                     params.app_key = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_APPKEY;
                     params.token = VuFindConfigurationSettings.VUFIND_FILE_UPLOAD_ENDPOINT_TOKEN;

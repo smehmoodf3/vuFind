@@ -238,4 +238,7 @@
 		</aside>
 	<% } %>
 	<div id="banner-details-bottom" class="content-banner banner-details-bottom"></div>
+
+	<%= vuFindvumatch_recommendations(view.model.id) %>
+
 </div>

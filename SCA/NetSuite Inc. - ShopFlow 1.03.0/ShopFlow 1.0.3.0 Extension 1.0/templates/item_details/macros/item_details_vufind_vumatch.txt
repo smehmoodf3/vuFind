@@ -1,0 +1,32 @@
+<% registerMacro('vuFindvumatch_recommendations', function (itemId) { %>
+
+<%
+var storeId = SC.ENVIRONMENT.siteSettings.siteid;
+var suiteletUrl;
+var storeDomain = SC.ENVIRONMENT.currentHostString;
+var itemInternalId = itemId;
+
+alert(' storeId  ' + storeId +'     storeDomain '+storeDomain +'    itemInternalId ' + itemInternalId  );
+
+
+suiteletUrl="/app/site/hosting/scriptlet.nl?script=customscript_vufind_recommendations_suit&deploy=customdeploy_vufind_recommendations_suit"+"&storeid="+storeId+"&storedomain="+storeDomain+"&storeitemid="+itemInternalId;
+
+(function($){
+
+$.ajax({ url: suiteletUrl,
+         dataType: "jsonp",
+         jsonpCallback: 'VuFindTemplatesHelper.vuFindRecommendations()'
+       });
+
+})(jQuery);
+
+
+%>
+
+	<div >
+		<H2>You may also like :</H2>
+	</div>
+
+
+
+<% }) %>
