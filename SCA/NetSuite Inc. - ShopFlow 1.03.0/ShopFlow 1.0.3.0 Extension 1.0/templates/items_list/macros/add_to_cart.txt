@@ -1,0 +1,42 @@
+<% registerMacro('addToCart', function (item) { %>
+	<% if (!item.getStockInfo().isInStock && item.getStockInfo().showOutOfStockMessage) { %>
+	<% } else {%>
+			<button type="button" class="btn btn-success" style="float:left;" data-id="<%= item.get('_id') %>_add_to_cart" data-action="addtocarttest"><i class="icon-shopping-cart icon-white"></i>
+						<%= _('Buy').translate() %></button>
+	
+	<div id="<%= item.get('_id') %>_add_to_cart" class="dropdown-menu" style="display:none; border: 2px solid #666666; border-radius: 5px;padding: 10px;text-align: center;z-index: 100;margin-top: 10px;">
+		<div class="well-body" data-id="<%= item.get('_id') %>">
+			<% if (!item.isProperlyConfigured()) { %>
+				<div class="alert alert-error">
+					<%= _('<b>Warning</b>: This item is not properly configured, please contact your administrator.').translate() %>
+				</div>
+			<% } else { %>
+				<% _.each(item.attributes.itemoptions_detail.fields, function(field) { %>
+					<% field.cartOptionId = field.internalid
+						, field.url = field.internalid %>
+					<%= SC.macros.itemDetailsOptionDropdown(field, null, item)%>
+				<% }) %>
+				<form action="#" class="form-inline add-to-cart-form">
+					<% if (item.get('_itemType') !== 'GiftCert'){ %>
+						<label for="quantity">
+							<%= item.get('_minimumQuantity') !== 1 ? _('Quantity (Minimum of $(0) required)').translate(item.get('_minimumQuantity')) : _('Quantity').translate() %>
+						</label>
+						<div class="control-group">
+							<input type="number" name="quantity" id="quantity_<%= item.get('_id') %>" class="input-mini quantity" value="1" min="1">
+					<% } else { %>
+						<div class="control-group">
+							<input type="hidden" id="quantity_<%= item.get('_id') %>" name="quantity" value="1">
+					<% } %>
+						</div>
+					<div data-type="alert-placeholder"></div>
+					<button data-type="add-to-cart" data-id="<%= item.get('_id') %>" class="btn btn-primary btn-large add-to-cart-btn"<% if (!item.isReadyForCart()) {%> disabled<%}%>>
+						<i class="icon-shopping-cart icon-white"></i>
+						<%= _('Add to Cart').translate() %>
+					</button>
+				</form>
+			<% } %>					
+			<div data-type="product-lists-control"></div>
+		</div>
+	</div>
+	<% } %>
+<% }) %>

@@ -1,0 +1,82 @@
+<style type="text/css">
+body{font-family:Arial, Helvetica, sans-serif;}
+.box{
+	background:#f2f5f8; border-radius:7px;
+	padding:10px;
+	overflow:hidden;}
+.box img{text-align:center;}
+.box h2{padding:0; margin:0; color:#383737; font-size:24px; font-weight:normal;}
+.box p{color:#b4bbc2; font-size:16px; font-weight:normal;}
+.box .price{font-weight:bold; color:#333; font-size:18px; float:left;}
+.box .qvbtn{ float:right;}
+
+body{font-family:Arial, Helvetica, sans-serif; margin:0; padding:0}
+footer{background:#454545; padding:20px; overflow: hidden;box-shadow: inset 0px 3px 5px #333;}
+footer .wdetails{float:left; width:30%;min-width:300px;margin:20px 0;}
+footer .wdetails p{color:#a59797; font-size:14px; padding: 0 10px;
+width: 57%;}
+footer .wdetails p.copy{color:#7d7d7d; font-size:12px;}
+footer .blinks{float:left; width:17%; min-width:200px; margin:20px 0;}
+footer .wdetails p.copy{color:#7d7d7d; font-size:12px;}
+footer .blinks .lgtxt{color:#e0e0e0; font-size:14px;}
+footer .blinks ul li{color:#898989;font-size:12px; list-style:none;}
+footer .social{float:left; width:15%; min-width:200px;margin:20px 0;}
+footer ul{margin:0;padding: 0;}
+
+</style>
+
+<div id="layout" class="layout">
+	<header id="site-header" class="site-header">
+		<%= header(view) %>
+	</header>
+	<!-- Main Content Area -->
+	<div id="content" class="container content"></div>
+	<!-- / Main Content Area -->
+</div>
+	<footer id="site-footer" class="site-footer">
+		<!-- <%= footer(view) %> -->
+		<div class="wdetails">
+<img src="/c.TSTDRV1260754/shopflow-1-03-0/js/wearablez_footerlogo.png" />
+<p>4053 Rocky Road Philadelphia, PA 19107, Toronto Canada</p>
+<br /><p class="copy">©2014 Wearables of California Inc. All rights reserved.</p>
+</div>
+<div class="blinks">
+<ul><li class="lgtxt">Company Info</li>
+<br/>
+<li>About Wearablez</li>
+<li>Careers</li>
+<li>Investor Relations</li>
+<li>Social Responsibility</li>
+<li>Privacy Policy</li>
+<li>Terms and Conditions</li>
+<li>Credit Card</li></ul>
+</div>
+<div class="blinks">
+<ul><li class="lgtxt">Just for you</li>
+<br/>
+<li>Customer Service</li>
+<li>Contact Us</li>
+<li>My Account</li>
+<li>Wish List</li>
+<li>Affiliates</li>
+<li>International Shipping</li>
+<li>Gift Card</li></ul>
+</div>
+<div class="blinks">
+<ul><li class="lgtxt">Just for you</li>
+<br/>
+<li>Popular pages</li>
+<li>Women's Clothing</li>
+<li>Men's Clothing</li>
+<li>Dresses</li>
+<li>Women's Jeans</li>
+<li>Men's Jeans</li>
+<li>Men's Suits</li>
+<li>Women's Tops</li></ul>
+</div>
+<div class="social">
+<a href=""><img src="/c.TSTDRV1260754/shopflow-1-03-0/js/fb.png" border="0" /></a>&nbsp;&nbsp;
+<a href=""><img src="/c.TSTDRV1260754/shopflow-1-03-0/js/twr.png" border="0" /></a>
+</div>
+	</footer>
+</div>

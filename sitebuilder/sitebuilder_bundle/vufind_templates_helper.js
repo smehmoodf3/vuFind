@@ -89,7 +89,7 @@ var VuFindTemplatesHelper = {
      */
     addVuFindClickEvent: function () {
         (function ($) {
-            $('.vufind_f3_bxslider a.vuFindClickTrack').click(function() {
+            $('.vufind_f3_bxslider a.vuFindClickTrack,.vufind_f3_bxslider_vustyle a.vuFindClickTrackVuStyle').click(function() {
                 var internalid = $(this).data('id');
                 var storeIdElements=$("[name='n']");
                 var clickTrackURL;
