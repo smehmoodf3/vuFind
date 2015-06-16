@@ -21,11 +21,18 @@ $.ajax({ url: suiteletUrl,
 })(jQuery);
 
 
+
 %>
 
-	<div >
-		<H2>You may also like :</H2>
-	</div>
+	<div  class="vufind_f3_bxslider" >
+    <h2 style ="display:none;" class="vumatchheading">You may also like</h2>
+    <ul class="recommendationsList" />
+    </div>
+
+    <div  class="vufind_f3_bxslider_vustyle" >
+    <h2 style ="display:none;" class="vustyleheading">Style it with</h2>
+    <ul class="recommendationsListVuStyle" />
+    </div>
 
 
 

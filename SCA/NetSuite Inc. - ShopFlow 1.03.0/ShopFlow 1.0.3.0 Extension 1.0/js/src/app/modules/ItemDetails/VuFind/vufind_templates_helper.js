@@ -24,6 +24,7 @@ var VuFindTemplatesHelper = {
             var temp;
             var itemDetailDesc;
 
+
             if (!!data && data.status !== 'fail') {
                 recommendations = data.recommendations;
                 vuStylerecommendations = data.recommendationsVuStyle;
@@ -36,6 +37,12 @@ var VuFindTemplatesHelper = {
                             itemImg = recommendations[r].imageurl;
                             itemDesc = recommendations[r].storedisplayname;
                             itemDetailDesc = recommendations[r].storedescription;
+                            try{ if(!!SC.ENVIRONMENT.siteSettings.sitetype)
+                                //Call to item Api
+                                itemImg = "/c.TSTDRV1260754/shopflow-1-03-0/img/no_image_available.jpeg";
+                                itemURL = '';
+                            }catch(ex){}
+
                             htmlData = htmlData + '<a href="' + itemURL + '" class="vuFindClickTrack" data-id="'+recommendations[r].internalid+'"><img src="' + itemImg + '"></a>';
                             htmlData = htmlData + '<br/>  ' + itemDesc;
                             htmlData = htmlData + '<br/>  ' + itemDetailDesc;
@@ -56,6 +63,7 @@ var VuFindTemplatesHelper = {
                         itemImg = vuStylerecommendations[r].imageurl;
                         itemDesc = vuStylerecommendations[r].storedisplayname;
                         itemDetailDesc = vuStylerecommendations[r].storedescription;
+                        try{ if(!!SC.ENVIRONMENT.siteSettings.sitetype) itemImg = "/c.TSTDRV1260754/shopflow-1-03-0/img/no_image_available.jpeg";  }catch(ex){}
                         htmlData = htmlData + '<a href="' + itemURL + '" class="vuFindClickTrackVuStyle" data-id="'+vuStylerecommendations[r].internalid+'"><img src="' + itemImg + '"></a>';
                         htmlData = htmlData + '<br/>  ' + itemDesc;
                         htmlData = htmlData + '<br/>  ' + itemDetailDesc;
@@ -169,7 +177,6 @@ var VuFindTemplatesHelper = {
                 if (!!storeIdElements && storeIdElements.length > 0) {
                     storeId = storeIdElements[0].value;
                 }
-
                 var lineItem = itemsInOrderForVuFound .split("||");
                 for (var inum = 0; inum < lineItem.length; inum++) {
                     itemAttributes = lineItem[inum].split("|");
@@ -362,6 +369,47 @@ var VuFindTemplatesHelper = {
             }
         }
         return updatedList;
-    }
+    },
+    /* Function to get URL for SCA Store
+     * @param   {object} item - item object for which url required
+     */
+      getSCAItemURL: function(item)
+    {
 
+    // If this item is a child of a matrix return the url of the parent
+    //if (item.matrixParent) && item.matrixParent.get('internalid'))
+    //{
+    //	return item.get('_matrixParent').get('_url');
+    //}
+    // if its a standar version we need to send it to the canonical url
+    //else if (SC.ENVIRONMENT.siteType && SC.ENVIRONMENT.siteType === 'STANDARD')
+    //{
+    //	return item.get('canonicalurl');
+    //}
+
+    // Other ways it will use the url component or a default /product/ID
+        return item.urlcomponent ? '/'+ item.urlcomponent : '/product/'+ item.internalid;
+    },
+    /* Function to get Item Data of SCA Store
+     * @param   {object} item - item object for which url required
+     */
+    getSCAItemApiData: function(internalId)
+    {
+        (function ($) {
+            var storeDomain =  SC.ENVIRONMENT.currentHostString;
+            var itemApiUrl  =  'http://'+ storeDomain + '/api/items' + '?include=facets&fieldset=search&n=' + SC.ENVIRONMENT.siteSettings.siteid+'&id='+ internalId;
+            var resultData;
+            $.ajax({
+                type: "GET",
+                url: itemApiUrl,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async : false,
+                success : function(d){ resultData = d; }
+            });
+
+            return resultData;
+
+        })(jQuery);
+    }
 };

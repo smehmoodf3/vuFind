@@ -37,7 +37,6 @@ define('Facets.Router', ['Facets.Views', 'Facets.Helper', 'Facets.Model', 'Categ
 
 			// Model
 			var model = new Model()
-
 			// and View
 			,	view = new Views.Browse({
 					translator: translator
@@ -46,7 +45,7 @@ define('Facets.Router', ['Facets.Views', 'Facets.Helper', 'Facets.Model', 'Categ
 				,	model: model
 				});
 
-
+            debugger;
 			model.fetch({
 				data: translator.getApiParams()
 			,	killerId: this.application.killerId

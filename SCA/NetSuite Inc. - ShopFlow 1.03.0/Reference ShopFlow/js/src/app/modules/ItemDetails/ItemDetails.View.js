@@ -373,6 +373,7 @@ define('ItemDetails.View', ['Facets.Translator', 'ItemDetails.Collection'], func
 		// and transform them into an ItemDetails.Collection
 	,	getCorrelatedItems: function ()
 		{
+            debugger;
 			if (!this.correlatedItems)
 			{
 				// Related items not loaded. Create a Collection
