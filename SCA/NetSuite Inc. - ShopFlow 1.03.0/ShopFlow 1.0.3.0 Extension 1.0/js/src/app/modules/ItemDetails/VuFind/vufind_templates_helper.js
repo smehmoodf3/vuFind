@@ -391,25 +391,29 @@ var VuFindTemplatesHelper = {
         return item.urlcomponent ? '/'+ item.urlcomponent : '/product/'+ item.internalid;
     },
     /* Function to get Item Data of SCA Store
-     * @param   {object} item - item object for which url required
+     * @param   {Array} internalIdsArray - internal ids for which item api call will done
      */
-    getSCAItemApiData: function(internalId)
+    getSCAItemApiData: function(internalIdsArray)
     {
-        (function ($) {
-            var storeDomain =  SC.ENVIRONMENT.currentHostString;
-            var itemApiUrl  =  'http://'+ storeDomain + '/api/items' + '?include=facets&fieldset=search&n=' + SC.ENVIRONMENT.siteSettings.siteid+'&id='+ internalId;
-            var resultData;
-            $.ajax({
-                type: "GET",
-                url: itemApiUrl,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async : false,
-                success : function(d){ resultData = d; }
-            });
+        var resultData;
+        if(!!internalIdsArray && internalIdsArray.length>0) {
+            (function ($) {
+                var storeDomain = SC.ENVIRONMENT.currentHostString;
+                var itemApiUrl = 'http://' + storeDomain + '/api/items' + '?include=facets&fieldset=search&n=' + SC.ENVIRONMENT.siteSettings.siteid + '&id=' + internalIdsArray.join(',');
 
-            return resultData;
+                $.ajax({
+                    type: "GET",
+                    url: itemApiUrl,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: false,
+                    success: function (d) {
+                        resultData = d;
+                    }
+                });
 
-        })(jQuery);
+            })(jQuery);
+        }
+        return resultData;
     }
 };
